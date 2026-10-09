@@ -72,16 +72,16 @@ Thư mục gốc:
 └── service/                        : Tầng Service điều phối nghiệp vụ
     └── DocumentProcessor.java      : Điều phối quy trình duyệt, trích xuất, lưu trữ và thông báo
 
-5. HƯỚNG DẪN BIÊN DỊCH VÀ CHẠY STEP-BY-STEP
+5. HƯỚNG DẪN BIÊN DỊCH VÀ CHẠY
 --------------------------------------------------------------------------------
-Bước 1: Mở Terminal (Command Prompt / PowerShell / Bash) tại thư mục gốc dự án.
+Bước 1: Mở Terminal tại thư mục gốc dự án.
 
-Bước 2: Biên dịch toàn bộ mã nguồn ra thư mục bin/:
-        javac -encoding UTF-8 -d bin model/*.java extractor/*.java validation/*.java notification/*.java repository/*.java service/*.java *.java
+Bước 2: Biên dịch:
+        javac -d bin *.java
 
-Bước 3: Chạy chương trình Demo kịch bản Console (3 kịch bản: Happy Path, Fail Validation, Multi-format):
-        java -Dfile.encoding=UTF-8 -cp bin MainDemo
+Bước 3: Chạy Demo Console:
+        java -cp bin MainDemo
 
-Bước 4: Chạy giao diện đồ họa Java Swing:
-        java -Dfile.encoding=UTF-8 -cp bin MainSwingUI
+Bước 4: Chạy giao diện Swing:
+        java -cp bin MainSwingUI
 ================================================================================
