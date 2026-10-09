@@ -1,0 +1,17 @@
+# Compiled class files
+*.class
+bin/
+out/
+build/
+
+# Temporary / OS files
+.DS_Store
+__MACOSX/
+Thumbs.db
+
+# Storage & Archive
+server_storage/
+*.zip
+
+# Assignment PDFs (keep repo clean with source code only)
+*.pdf
