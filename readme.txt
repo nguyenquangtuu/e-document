@@ -69,8 +69,5 @@ Thư mục gốc:
 │   ├── MySqlRepository.java        : Mô phỏng lưu trữ vào Cơ sở dữ liệu MySQL
 │   └── S3Repository.java           : Mô phỏng lưu trữ lên Đám mây AWS S3
 │
-├── service/                        : Tầng Service điều phối nghiệp vụ
-│   └── DocumentProcessor.java      : Điều phối quy trình duyệt, trích xuất, lưu trữ và thông báo
-│
-└── test/                           : Tầng kiểm thử tự động
-    └── SystemIntegrationTest.java  : Unit Test và Integration Test kiểm thử toàn diện 5 Pattern
+└── service/                        : Tầng Service điều phối nghiệp vụ
+    └── DocumentProcessor.java      : Điều phối quy trình duyệt, trích xuất, lưu trữ và thông báo
