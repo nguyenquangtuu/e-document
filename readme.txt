@@ -74,37 +74,3 @@ Thư mục gốc:
 │
 └── test/                           : Tầng kiểm thử tự động
     └── SystemIntegrationTest.java  : Unit Test và Integration Test kiểm thử toàn diện 5 Pattern
-
-5. HƯỚNG DẪN BIÊN DỊCH VÀ CHẠY STEP-BY-STEP
---------------------------------------------------------------------------------
-Bước 1: Mở Terminal tại thư mục gốc dự án.
-
-Bước 2: Biên dịch toàn bộ mã nguồn ra thư mục bin/:
-        javac -encoding UTF-8 -d bin model/*.java extractor/*.java validation/*.java notification/*.java repository/*.java service/*.java test/*.java *.java
-
-Bước 3: Chạy chương trình Demo kịch bản Console (Happy Path, Fail Validation, Multi-format):
-        java -Dfile.encoding=UTF-8 -cp bin MainDemo
-
-Bước 4: Chạy giao diện đồ họa Java Swing:
-        java -Dfile.encoding=UTF-8 -cp bin MainSwingUI
-
-Bước 5: Chạy bộ kiểm thử tự động (Unit Test / Integration Test):
-        java -Dfile.encoding=UTF-8 -cp bin test.SystemIntegrationTest
-
-6. DANH SÁCH 5 DESIGN PATTERN ĐÃ ÁP DỤNG
---------------------------------------------------------------------------------
-Yêu cầu | Pattern                   | File trọng tâm
---------+---------------------------+-------------------------------------------------------
-YC1     | Builder                   | model/DocumentBuilder.java
-YC2     | Strategy + Simple Factory | extractor/ContentExtractor.java, ExtractorFactory.java
-YC3     | Chain of Responsibility   | validation/ValidationHandler.java, ValidationPipeline.java
-YC4     | Observer                  | notification/DocumentObserver.java, NotificationManager.java
-YC5     | Repository + Factory      | repository/DocumentRepository.java, RepositoryFactory.java
-
-7. LƯU Ý KHI NỘP BÀI THEO QUY ĐỊNH
---------------------------------------------------------------------------------
-- KHÔNG nộp các thư mục bin/, obj/, build/, package/ và file video nặng trong file zip.
-- Nộp kèm file báo cáo PDF và source Word (.docx) / LaTeX.
-- Nộp file Bảng đánh giá chi tiết đóng góp nhóm.
-- Đảm bảo link video demo được cấp quyền công khai (Anyone with the link can view).
-================================================================================
