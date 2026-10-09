@@ -27,10 +27,10 @@
 | Yêu Cầu | Bài Toán Nghiệp Vụ | Design Pattern | Lớp Trọng Tâm |
 | :---: | :--- | :---: | :--- |
 | **YC 1** | Cho phép lưu nháp và nộp hồ sơ theo từng bước | **Builder** | [`model/DocumentBuilder.java`](model/DocumentBuilder.java)<br>[`model/Document.java`](model/Document.java) |
-| **YC 2** | Đọc đa định dạng tài liệu (`.txt`, `.pdf`, `.jpg`, `.png`) | **Strategy + Factory Method** | [`extractor/ContentExtractor.java`](extractor/ContentExtractor.java)<br>[`extractor/ExtractorFactory.java`](extractor/ExtractorFactory.java) |
+| **YC 2** | Đọc đa định dạng tài liệu (Đọc `.txt` thật, mô phỏng OCR `.pdf` & ảnh `.jpg`) | **Strategy + Factory Method** | [`extractor/ContentExtractor.java`](extractor/ContentExtractor.java)<br>[`extractor/ExtractorFactory.java`](extractor/ExtractorFactory.java) |
 | **YC 3** | Quy trình kiểm duyệt linh hoạt qua 3 trạm độc lập | **Chain of Responsibility** | [`validation/ValidationPipeline.java`](validation/ValidationPipeline.java)<br>[`validation/ValidationHandler.java`](validation/ValidationHandler.java) |
 | **YC 4** | Đăng ký nhận thông báo theo nhu cầu (`Email`, `SMS`, `App Push`) | **Observer** | [`notification/NotificationManager.java`](notification/NotificationManager.java)<br>[`notification/DocumentObserver.java`](notification/DocumentObserver.java) |
-| **YC 5** | Mở rộng lưu trữ đa nền tảng (`JSON`, `MySQL`, `AWS S3`) | **Repository + Factory** | [`repository/DocumentRepository.java`](repository/DocumentRepository.java)<br>[`repository/RepositoryFactory.java`](repository/RepositoryFactory.java) |
+| **YC 5** | Mở rộng lưu trữ dữ liệu (Lưu `.json` thật, mô phỏng CSDL `MySQL` & `AWS S3`) | **Repository + Factory** | [`repository/DocumentRepository.java`](repository/DocumentRepository.java)<br>[`repository/RepositoryFactory.java`](repository/RepositoryFactory.java) |
 
 ---
 
