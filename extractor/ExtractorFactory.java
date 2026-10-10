@@ -3,7 +3,12 @@ package extractor;
 import java.util.ArrayList;
 import java.util.List;
 
-// Factory Method: tra ve extractor phu hop voi duoi file
+/**
+ * Factory Method Pattern (Chuong 5) ket hop Strategy Pattern (Chuong 3):
+ * Chịu trách nhiệm khởi tạo và cung cấp Strategy ContentExtractor phù hợp
+ * dựa trên phần mở rộng của tệp tài liệu.
+ * Giúp client tách biệt hoàn toàn khỏi logic kiểm tra chuỗi định dạng (gỡ bỏ if-else cứng nhắc).
+ */
 public class ExtractorFactory {
     private static final List<ContentExtractor> extractors = new ArrayList<>();
 
