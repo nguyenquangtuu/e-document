@@ -1,6 +1,14 @@
 package model;
 
-// Lop chua thong tin ho so dien tu (Domain Model)
+/**
+ * Lop thuc the chua thong tin ho so dien tu (Domain Model Entity).
+ * Dong vai tro la Receiver/Data Holder xuyen suot cac mau thiet ke:
+ * - Duoc dong goi trong Command de thuc thi/hoan tac (Command Pattern).
+ * - Duoc kiem tra boi AbstractDocumentValidator (Template Method Pattern).
+ * - Duoc trich xuat boi ContentExtractor (Strategy Pattern).
+ * - Duoc luu tru qua DocumentStorageTarget (Adapter Pattern).
+ * - Duoc thong bao qua NotificationManager (Observer Pattern).
+ */
 public class Document {
     private String id;
     private String applicantName;
