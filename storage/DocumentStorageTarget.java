@@ -15,5 +15,6 @@ public interface DocumentStorageTarget {
     List<Document> findAll() throws Exception;
     void delete(String id) throws Exception;
     boolean exists(String id) throws Exception;
+    int count() throws Exception;
     String getStorageName();
 }
