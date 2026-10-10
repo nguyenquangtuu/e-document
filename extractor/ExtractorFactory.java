@@ -18,6 +18,12 @@ public class ExtractorFactory {
         extractors.add(new ImageOcrExtractor());
     }
 
+    public static void registerExtractor(ContentExtractor extractor) {
+        if (extractor != null && !extractors.contains(extractor)) {
+            extractors.add(0, extractor); // Uu tien extractor moi dang ky
+        }
+    }
+
     public static ContentExtractor getExtractor(String fileExtension) {
         if (fileExtension != null && !fileExtension.trim().isEmpty()) {
             for (ContentExtractor extractor : extractors) {
