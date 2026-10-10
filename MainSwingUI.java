@@ -1,6 +1,9 @@
+import command.ApproveDocumentCommand;
+import command.DocumentCommandInvoker;
+import command.RejectDocumentCommand;
 import model.Document;
-import repository.DocumentRepository;
-import repository.RepositoryFactory;
+import storage.DocumentStorageTarget;
+import storage.StorageAdapterFactory;
 import service.DocumentProcessor;
 
 import javax.swing.*;
@@ -11,22 +14,25 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-// Giao dien Swing chinh cua he thong
+// Giao dien Swing chinh cua he thong eDocument v2.0
 public class MainSwingUI extends JFrame {
     private JTextArea consoleArea;
     private JTable documentTable;
     private DefaultTableModel tableModel;
     private DocumentProcessor processor;
-    private DocumentRepository repository;
+    private DocumentStorageTarget storageAdapter;
+    private final DocumentCommandInvoker invoker;
     private List<Document> documentList;
+    private JComboBox<String> cbStorageType;
 
     public MainSwingUI() {
-        repository = RepositoryFactory.getDefaultRepository();
-        processor = new DocumentProcessor(repository);
-        documentList = new ArrayList<>();
+        this.invoker = new DocumentCommandInvoker();
+        this.storageAdapter = StorageAdapterFactory.getDefaultAdapter();
+        this.processor = new DocumentProcessor(this.storageAdapter);
+        this.documentList = new ArrayList<>();
 
-        setTitle("He thong Quan ly Ho so Dien tu - eDocument v2.0");
-        setSize(900, 650);
+        setTitle("He thong Quan ly Ho so Dien tu - eDocument v2.0 (Design Patterns GoF)");
+        setSize(980, 680);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -34,24 +40,39 @@ public class MainSwingUI extends JFrame {
         tableModel = new DefaultTableModel(columnNames, 0);
         documentTable = new JTable(tableModel);
         JScrollPane tableScrollPane = new JScrollPane(documentTable);
-        tableScrollPane.setBorder(BorderFactory.createTitledBorder("Danh sach ho so"));
+        tableScrollPane.setBorder(BorderFactory.createTitledBorder("Danh sach ho so dien tu"));
 
         consoleArea = new JTextArea();
         consoleArea.setEditable(false);
-        consoleArea.setBackground(new Color(30, 30, 30));
-        consoleArea.setForeground(new Color(100, 255, 100));
+        consoleArea.setBackground(new Color(25, 25, 25));
+        consoleArea.setForeground(new Color(120, 255, 120));
         consoleArea.setFont(new Font("Consolas", Font.PLAIN, 12));
         JScrollPane logScrollPane = new JScrollPane(consoleArea);
-        logScrollPane.setBorder(BorderFactory.createTitledBorder("Log he thong"));
+        logScrollPane.setBorder(BorderFactory.createTitledBorder("Log he thong & Thong bao Observer"));
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tableScrollPane, logScrollPane);
-        splitPane.setDividerLocation(280);
+        splitPane.setDividerLocation(300);
         add(splitPane, BorderLayout.CENTER);
 
-        JPanel toolBar = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        // Thanh cong cu Toolbar
+        JPanel toolBar = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 8));
         JButton btnAdd = new JButton("Them ho so");
+        JButton btnApprove = new JButton("Phe duyet (Command)");
+        JButton btnReject = new JButton("Tu choi (Command)");
+        JButton btnUndo = new JButton("Hoan tac (Undo)");
         JButton btnClear = new JButton("Xoa log");
+
+        // Chon Adapter luu tru (Adapter Pattern - Chuong 8)
+        JLabel lblStorage = new JLabel("Kho luu tru (Adapter):");
+        cbStorageType = new JComboBox<>(new String[]{"Local JSON File", "MySQL Database", "AWS S3 Cloud"});
+
         toolBar.add(btnAdd);
+        toolBar.add(btnApprove);
+        toolBar.add(btnReject);
+        toolBar.add(btnUndo);
+        toolBar.add(new JSeparator(SwingConstants.VERTICAL));
+        toolBar.add(lblStorage);
+        toolBar.add(cbStorageType);
         toolBar.add(btnClear);
         add(toolBar, BorderLayout.NORTH);
 
@@ -59,41 +80,108 @@ public class MainSwingUI extends JFrame {
         loadExistingDocuments();
         refreshTable();
 
+        // Bat su kien chuyen doi Adapter Luu tru (Adapter Pattern)
+        cbStorageType.addActionListener(e -> {
+            String selected = (String) cbStorageType.getSelectedItem();
+            String key = "json";
+            if (selected != null && selected.contains("MySQL")) key = "mysql";
+            else if (selected != null && selected.contains("AWS")) key = "s3";
+
+            this.storageAdapter = StorageAdapterFactory.getStorageAdapter(key);
+            this.processor = new DocumentProcessor(this.storageAdapter);
+            System.out.println("\n[Adapter Pattern] Da chuyen sang kho luu tru: " + storageAdapter.getStorageName());
+            loadExistingDocuments();
+            refreshTable();
+        });
+
+        // Su kien Them ho so moi
         btnAdd.addActionListener(e -> {
-            AddDocumentDialog dialog = new AddDocumentDialog(this, processor);
+            AddDocumentDialog dialog = new AddDocumentDialog(this, processor, invoker);
             dialog.setVisible(true);
             refreshTable();
         });
 
+        // Su kien Phe duyet (Command Pattern)
+        btnApprove.addActionListener(e -> {
+            Document selectedDoc = getSelectedDocument();
+            if (selectedDoc == null) {
+                JOptionPane.showMessageDialog(this, "Vui long chon 1 ho so trong bang de phe duyet!");
+                return;
+            }
+            try {
+                invoker.executeCommand(new ApproveDocumentCommand(storageAdapter, selectedDoc, "Can bo da duyet qua giao dien Swing"));
+                refreshTable();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Loi khi phe duyet: " + ex.getMessage());
+            }
+        });
+
+        // Su kien Tu choi (Command Pattern)
+        btnReject.addActionListener(e -> {
+            Document selectedDoc = getSelectedDocument();
+            if (selectedDoc == null) {
+                JOptionPane.showMessageDialog(this, "Vui long chon 1 ho so trong bang de tu choi!");
+                return;
+            }
+            String reason = JOptionPane.showInputDialog(this, "Nhap ly do tu choi:", "Tu choi ho so", JOptionPane.QUESTION_MESSAGE);
+            if (reason != null && !reason.trim().isEmpty()) {
+                try {
+                    invoker.executeCommand(new RejectDocumentCommand(storageAdapter, selectedDoc, reason.trim()));
+                    refreshTable();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Loi khi tu choi: " + ex.getMessage());
+                }
+            }
+        });
+
+        // Su kien Hoan tac Undo (Command Pattern)
+        btnUndo.addActionListener(e -> {
+            if (invoker.canUndo()) {
+                invoker.undo();
+                refreshTable();
+            } else {
+                JOptionPane.showMessageDialog(this, "Khong co thao tac nao de hoan tac (Undo stack rong)!");
+            }
+        });
+
         btnClear.addActionListener(e -> consoleArea.setText(""));
 
+        // Hien thi chi tiet ho so khi click vao hang
         documentTable.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && documentTable.getSelectedRow() != -1) {
-                int selectedRow = documentTable.getSelectedRow();
-                String docId = tableModel.getValueAt(selectedRow, 0).toString();
-                
-                for (Document doc : documentList) {
-                    if (doc.getId().equals(docId)) {
-                        System.out.println("\nChi tiet ho so: " + doc.getId());
-                        System.out.println("- Nguoi nop: " + doc.getApplicantName() + " (" + doc.getApplicantEmail() + ", " + doc.getApplicantPhone() + ")");
-                        System.out.println("- Can bo: " + doc.getOfficerName() + " (" + doc.getOfficerEmail() + ")");
-                        System.out.println("- Loai ho so: " + doc.getDocumentType());
-                        System.out.println("- Tep dinh kem: " + doc.getFilePath() + " (" + doc.getFileSizeKB() + " KB)");
-                        System.out.println("- Chu ky so: " + doc.getDigitalSignature());
-                        System.out.println("- Trang thai: " + (doc.getStatus() != null ? doc.getStatus().getDisplayName() : ""));
-                        break;
-                    }
+                Document doc = getSelectedDocument();
+                if (doc != null) {
+                    System.out.println("\nChi tiet ho so: " + doc.getId());
+                    System.out.println("- Nguoi nop: " + doc.getApplicantName() + " (" + doc.getApplicantEmail() + ", " + doc.getApplicantPhone() + ")");
+                    System.out.println("- Can bo: " + doc.getOfficerName() + " (" + doc.getOfficerEmail() + ")");
+                    System.out.println("- Loai ho so: " + doc.getDocumentType());
+                    System.out.println("- Tep dinh kem: " + doc.getFilePath() + " (" + doc.getFileSizeKB() + " KB)");
+                    System.out.println("- Chu ky so: " + doc.getDigitalSignature());
+                    System.out.println("- Noi dung trich xuat: " + (doc.getExtractedContent() != null ? doc.getExtractedContent() : "(Chua co)"));
+                    System.out.println("- Trang thai: " + (doc.getStatus() != null ? doc.getStatus().getDisplayName() : ""));
                 }
             }
         });
     }
 
-    private void loadExistingDocuments() {
+    private Document getSelectedDocument() {
+        int selectedRow = documentTable.getSelectedRow();
+        if (selectedRow == -1) return null;
+        String docId = tableModel.getValueAt(selectedRow, 0).toString();
+        for (Document doc : documentList) {
+            if (doc.getId().equals(docId)) {
+                return doc;
+            }
+        }
+        return null;
+    }
+
+    public void loadExistingDocuments() {
         try {
-            List<Document> loadedDocs = repository.findAll();
+            List<Document> loadedDocs = storageAdapter.findAll();
             documentList.clear();
             documentList.addAll(loadedDocs);
-            System.out.println("Da nap " + loadedDocs.size() + " ho so tu repository.");
+            System.out.println("Da nap " + loadedDocs.size() + " ho so tu kho " + storageAdapter.getStorageName());
         } catch (Exception e) {
             System.out.println("Loi nap du lieu: " + e.getMessage());
         }
@@ -105,7 +193,7 @@ public class MainSwingUI extends JFrame {
         }
     }
 
-    private void refreshTable() {
+    public void refreshTable() {
         tableModel.setRowCount(0);
         for (Document doc : documentList) {
             tableModel.addRow(new Object[]{
@@ -133,6 +221,9 @@ public class MainSwingUI extends JFrame {
             consoleArea.setCaretPosition(consoleArea.getDocument().getLength());
         });
     }
+
+    public DocumentCommandInvoker getInvoker() { return invoker; }
+    public DocumentProcessor getProcessor() { return processor; }
 
     public static void main(String[] args) {
         try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); } catch (Exception ignored) {}

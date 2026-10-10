@@ -1,5 +1,6 @@
+import command.DocumentCommandInvoker;
+import command.SubmitDocumentCommand;
 import model.Document;
-import model.DocumentBuilder;
 import model.DocumentStatus;
 import service.DocumentProcessor;
 
@@ -8,7 +9,7 @@ import java.awt.*;
 import java.io.File;
 import java.util.UUID;
 
-// Dialog nhap thong tin tiep nhan ho so
+// Dialog nhap thong tin tiep nhan ho so (Ket noi voi Command Pattern de Submit)
 public class AddDocumentDialog extends JDialog {
     private JTextField txtApplicantName, txtApplicantEmail, txtApplicantPhone;
     private JTextField txtOfficerName, txtOfficerEmail, txtOfficerPhone;
@@ -18,12 +19,18 @@ public class AddDocumentDialog extends JDialog {
     private File selectedFile;
     
     private DocumentProcessor processor;
+    private DocumentCommandInvoker invoker;
     private MainSwingUI parent;
 
     public AddDocumentDialog(MainSwingUI parent, DocumentProcessor processor) {
-        super(parent, "Tiep nhan ho so moi", true);
+        this(parent, processor, parent != null ? parent.getInvoker() : new DocumentCommandInvoker());
+    }
+
+    public AddDocumentDialog(MainSwingUI parent, DocumentProcessor processor, DocumentCommandInvoker invoker) {
+        super(parent, "Tiep nhan ho so moi (Command Pattern)", true);
         this.parent = parent;
         this.processor = processor;
+        this.invoker = (invoker != null) ? invoker : new DocumentCommandInvoker();
         
         setSize(440, 520);
         setLocationRelativeTo(parent);
@@ -61,7 +68,7 @@ public class AddDocumentDialog extends JDialog {
         formPanel.add(cbDocumentType);
 
         formPanel.add(new JLabel("Chu ky so:"));
-        txtDigitalSignature = new JTextField();
+        txtDigitalSignature = new JTextField("RSA_VALID_SIGNATURE");
         formPanel.add(txtDigitalSignature);
 
         formPanel.add(new JLabel("Tep dinh kem:"));
@@ -74,7 +81,7 @@ public class AddDocumentDialog extends JDialog {
         add(formPanel, BorderLayout.CENTER);
 
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton btnSend = new JButton("Gui ho so");
+        JButton btnSend = new JButton("Gui ho so (Submit)");
         JButton btnCancel = new JButton("Huy");
         btnPanel.add(btnSend);
         btnPanel.add(btnCancel);
@@ -106,26 +113,46 @@ public class AddDocumentDialog extends JDialog {
             }
         }
 
-        // Su dung Builder Pattern de tao doi tuong Document
-        Document doc = new DocumentBuilder()
-                .setId(UUID.randomUUID().toString().substring(0, 8))
-                .setApplicantInfo(txtApplicantName.getText().trim(), txtApplicantEmail.getText().trim(), txtApplicantPhone.getText().trim())
-                .setOfficerInfo(txtOfficerName.getText().trim(), txtOfficerEmail.getText().trim(), txtOfficerPhone.getText().trim())
-                .setDocumentInfo(cbDocumentType.getSelectedItem().toString())
-                .setFileInfo(filePath, ext, size)
-                .setSecurityInfo(txtDigitalSignature.getText().trim())
-                .setStatus(DocumentStatus.MOI_TAO)
-                .build();
+        // Khoi tao doi tuong Document truc tiep (Loai bo Builder Pattern)
+        String id = "DOC" + UUID.randomUUID().toString().substring(0, 5).toUpperCase();
+        Document doc = new Document(
+                id,
+                txtApplicantName.getText().trim(),
+                txtApplicantEmail.getText().trim(),
+                txtApplicantPhone.getText().trim(),
+                txtOfficerName.getText().trim(),
+                txtOfficerEmail.getText().trim(),
+                txtOfficerPhone.getText().trim(),
+                cbDocumentType.getSelectedItem().toString(),
+                filePath,
+                ext,
+                size,
+                txtDigitalSignature.getText().trim()
+        );
 
-        processor.process(doc);
+        try {
+            // Su dung Command Pattern de thuc thi lenh nop ho so
+            SubmitDocumentCommand submitCmd = new SubmitDocumentCommand(processor, doc);
+            invoker.executeCommand(submitCmd);
 
-        if (doc.getStatus() == DocumentStatus.DA_XU_LY || doc.getStatus() == DocumentStatus.DANG_XET_DUYET) {
-            parent.addDocumentToList(doc);
-            dispose();
-        } else {
+            if (doc.getStatus() == DocumentStatus.DA_XU_LY || doc.getStatus() == DocumentStatus.DANG_XET_DUYET || doc.getStatus() == DocumentStatus.DA_TIEP_NHAN) {
+                if (parent != null) {
+                    parent.addDocumentToList(doc);
+                }
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Ho so bi tu choi boi quy trinh kiem duyet (Template Method). Vui long kiem tra log chi tiet.",
+                        "Thong bao", JOptionPane.WARNING_MESSAGE);
+                if (parent != null) {
+                    parent.addDocumentToList(doc);
+                }
+                dispose();
+            }
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(this,
-                    "Ho so bi tu choi hoac khong hop le. Vui long kiem tra log.",
-                    "Thong bao", JOptionPane.WARNING_MESSAGE);
+                    "Loi khi gui ho so: " + ex.getMessage(),
+                    "Loi", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

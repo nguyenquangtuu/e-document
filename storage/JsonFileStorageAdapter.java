@@ -1,7 +1,6 @@
-package repository;
+package storage;
 
 import model.Document;
-import model.DocumentBuilder;
 import model.DocumentStatus;
 
 import java.io.File;
@@ -13,18 +12,28 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
-// Luu tru ho so duoi dang file JSON va file vat ly tren o dia
-public class JsonFileRepository implements DocumentRepository {
+/**
+ * Adapter 1 trong Adapter Pattern (Chuong 8 - Course Syllabus 504077):
+ * Chuyen doi (Adapt) he thong tap tin JSON cuc bo sang giao tiep tieu chuan DocumentStorageTarget.
+ */
+public class JsonFileStorageAdapter implements DocumentStorageTarget {
     private final String storageDirPath;
 
-    public JsonFileRepository() {
+    public JsonFileStorageAdapter() {
         this("server_storage");
     }
 
-    public JsonFileRepository(String storageDirPath) {
+    public JsonFileStorageAdapter(String storageDirPath) {
         this.storageDirPath = storageDirPath;
         File dir = new File(storageDirPath);
-        if (!dir.exists()) dir.mkdirs();
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+    }
+
+    @Override
+    public String getStorageName() {
+        return "Local JSON File Storage";
     }
 
     @Override
@@ -34,7 +43,7 @@ public class JsonFileRepository implements DocumentRepository {
         File dir = new File(storageDirPath);
         if (!dir.exists()) dir.mkdirs();
 
-        // Sao chep file dinh kem neu co
+        // Sao chep tap tin dinh kem neu co
         if (doc.getFilePath() != null && !doc.getFilePath().trim().isEmpty()) {
             File sourceFile = new File(doc.getFilePath());
             if (sourceFile.exists()) {
@@ -43,13 +52,13 @@ public class JsonFileRepository implements DocumentRepository {
             }
         }
 
-        // Xuat thong tin ho so ra file JSON
+        // Ghi thong tin ho so ra file JSON
         String json = toJson(doc);
         File dataFile = new File(storageDirPath, doc.getId() + "_data.json");
         try (FileWriter writer = new FileWriter(dataFile)) {
             writer.write(json);
         }
-        System.out.println("Luu ho so " + doc.getId() + " vao file: " + dataFile.getPath());
+        System.out.println("[JsonStorageAdapter] Da luu ho so " + doc.getId() + " vao: " + dataFile.getPath());
     }
 
     @Override
@@ -94,7 +103,6 @@ public class JsonFileRepository implements DocumentRepository {
         return new File(storageDirPath, id + "_data.json").exists();
     }
 
-    // Ham chuyen doi Document sang JSON
     public static String toJson(Document doc) {
         if (doc == null) return "{}";
         return "{\n" +
@@ -110,38 +118,32 @@ public class JsonFileRepository implements DocumentRepository {
                 "  \"fileExtension\": \"" + safeStr(doc.getFileExtension()) + "\",\n" +
                 "  \"fileSizeKB\": " + doc.getFileSizeKB() + ",\n" +
                 "  \"digitalSignature\": \"" + safeStr(doc.getDigitalSignature()) + "\",\n" +
+                "  \"extractedContent\": \"" + safeStr(doc.getExtractedContent()).replace("\n", " ").replace("\"", "'") + "\",\n" +
                 "  \"status\": \"" + doc.getStatusName() + "\"\n" +
                 "}";
     }
 
-    // Ham parse JSON ve Document
     public static Document fromJson(String json) {
         if (json == null || json.trim().isEmpty()) return null;
         try {
-            String id = extract(json, "id");
-            String applicantName = extract(json, "applicantName");
-            String applicantEmail = extract(json, "applicantEmail");
-            String applicantPhone = extract(json, "applicantPhone");
-            String officerName = extract(json, "officerName");
-            String officerEmail = extract(json, "officerEmail");
-            String officerPhone = extract(json, "officerPhone");
-            String documentType = extract(json, "documentType");
-            String filePath = extract(json, "filePath");
-            String fileExtension = extract(json, "fileExtension");
+            Document doc = new Document();
+            doc.setId(extract(json, "id"));
+            doc.setApplicantName(extract(json, "applicantName"));
+            doc.setApplicantEmail(extract(json, "applicantEmail"));
+            doc.setApplicantPhone(extract(json, "applicantPhone"));
+            doc.setOfficerName(extract(json, "officerName"));
+            doc.setOfficerEmail(extract(json, "officerEmail"));
+            doc.setOfficerPhone(extract(json, "officerPhone"));
+            doc.setDocumentType(extract(json, "documentType"));
+            doc.setFilePath(extract(json, "filePath"));
+            doc.setFileExtension(extract(json, "fileExtension"));
             String sizeStr = extract(json, "fileSizeKB");
-            long fileSizeKB = (sizeStr != null && !sizeStr.isEmpty()) ? Long.parseLong(sizeStr) : 0L;
-            String digitalSignature = extract(json, "digitalSignature");
+            doc.setFileSizeKB((sizeStr != null && !sizeStr.isEmpty()) ? Long.parseLong(sizeStr) : 0L);
+            doc.setDigitalSignature(extract(json, "digitalSignature"));
+            doc.setExtractedContent(extract(json, "extractedContent"));
             String status = extract(json, "status");
-
-            return new DocumentBuilder()
-                    .setId(id)
-                    .setApplicantInfo(applicantName, applicantEmail, applicantPhone)
-                    .setOfficerInfo(officerName, officerEmail, officerPhone)
-                    .setDocumentInfo(documentType)
-                    .setFileInfo(filePath, fileExtension, fileSizeKB)
-                    .setSecurityInfo(digitalSignature)
-                    .setStatus(DocumentStatus.fromString(status))
-                    .build();
+            doc.setStatus(DocumentStatus.fromString(status));
+            return doc;
         } catch (Exception e) {
             return null;
         }

@@ -1,6 +1,6 @@
 ================================================================================
  HỆ THỐNG TIẾP NHẬN VÀ XỬ LÝ HỒ SƠ ĐIỆN TỬ (E-DOCUMENT) v2.0
- Báo cáo Tiểu luận Giữa kỳ môn: Mẫu Thiết Kế (Design Patterns)
+ Báo cáo Tiểu luận Giữa kỳ môn: Mẫu Thiết Kế (Design Patterns - Mã MH: 504077)
  Trường Đại học Tôn Đức Thắng (TDTU) - Khoa Công nghệ Thông tin
 ================================================================================
 
@@ -16,70 +16,77 @@
 --------------------------------------------------------------------------------
 - Tên dự án: Hệ thống Tiếp nhận và Xử lý Hồ sơ Điện tử v2.0 (eDocument)
 - Mô tả: Nâng cấp từ phiên bản v1.0 nguyên khối (monolithic) sang v2.0 bằng việc
-  áp dụng 5 Design Patterns chuẩn GoF, giúp mã nguồn module hóa, linh hoạt mở rộng,
-  dễ kiểm thử và bảo trì.
+  áp dụng 100% các Mẫu Thiết Kế GoF nằm trong Đề cương môn học (Course Syllabus 504077),
+  bao gồm: Singleton (Chương 2), Strategy (Chương 3), Template Method (Chương 4),
+  Factory Method (Chương 5), Command với Undo/Redo & Logging (Chương 7),
+  Adapter (Chương 8) và Observer (Chương 9).
 - Link GitHub: https://github.com/nguyenquangtuu/e-document.git
 - Link video thuyết trình & demo: [DÁN LINK GOOGLE DRIVE / YOUTUBE CÔNG KHAI VÀO ĐÂY]
 
 3. YÊU CẦU MÔI TRƯỜNG
 --------------------------------------------------------------------------------
-- Java Development Kit: JDK 8 trở lên (Khuyến nghị JDK 11, 17, 21)
-- Không yêu cầu cài đặt Maven/Gradle (Sử dụng trực tiếp javac/java)
+- Java Development Kit: JDK 8 trở lên (Khuyến nghị JDK 11, 17, 21, 27)
+- Không yêu cầu cài đặt Maven/Gradle (Sử dụng trực tiếp javac/java thuần)
 - Hệ điều hành: Windows, macOS, Linux
 
 4. CẤU TRÚC THƯ MỤC SOURCE CODE
 --------------------------------------------------------------------------------
 Thư mục gốc:
 ├── readme.txt                      : File hướng dẫn chạy và thông tin nhóm
-├── MainDemo.java                   : File thực thi chạy 3 kịch bản demo trên Console
+├── README.md                       : Tài liệu Markdown trên GitHub
+├── MainDemo.java                   : File thực thi chạy 5 kịch bản demo trên Console
 ├── MainSwingUI.java                : File thực thi chạy giao diện đồ họa Java Swing
-├── AddDocumentDialog.java          : Dialog nhập liệu và nộp hồ sơ trên Swing
+├── AddDocumentDialog.java          : Dialog tiếp nhận hồ sơ qua SubmitDocumentCommand
 │
-├── model/                          : [Yêu cầu 1] Model dữ liệu & Builder Pattern
-│   ├── Document.java               : Lớp chứa thông tin hồ sơ điện tử
-│   ├── DocumentBuilder.java        : Builder hỗ trợ khởi tạo từng bước và lưu nháp
-│   └── DocumentStatus.java         : Enum trạng thái vòng đời của hồ sơ
+├── model/                          : Domain Model
+│   ├── Document.java               : Lớp thực thể hồ sơ điện tử
+│   └── DocumentStatus.java         : Enum trạng thái vòng đời
 │
-├── extractor/                      : [Yêu cầu 2] Strategy & Factory Method Pattern
-│   ├── ContentExtractor.java       : Interface Strategy trích xuất nội dung
-│   ├── ExtractorFactory.java       : Factory tạo bộ đọc phù hợp theo đuôi file
-│   ├── TxtExtractor.java           : Bộ đọc file .txt thuần túy
-│   ├── PdfExtractor.java           : Bộ đọc file .pdf qua OCR (mô phỏng)
-│   └── ImageOcrExtractor.java      : Bộ đọc hình ảnh .jpg, .png qua OCR (mô phỏng)
+├── command/                        : [Yêu cầu 1] Command Pattern (Chương 7)
+│   ├── DocumentCommand.java        : Interface Command (execute, undo)
+│   ├── SubmitDocumentCommand.java  : Lệnh nộp và xử lý hồ sơ
+│   ├── ApproveDocumentCommand.java : Lệnh phê duyệt hồ sơ
+│   ├── RejectDocumentCommand.java  : Lệnh từ chối hồ sơ
+│   └── DocumentCommandInvoker.java : Invoker quản lý Undo/Redo & Audit Logging
 │
-├── validation/                     : [Yêu cầu 3] Chain of Responsibility Pattern
-│   ├── ValidationHandler.java      : Abstract Handler cho từng trạm kiểm tra
-│   ├── ValidationPipeline.java     : Quản lý chuỗi kiểm duyệt và điều phối ngắt luồng
-│   ├── ValidationResult.java       : Đóng gói kết quả kiểm duyệt và thông báo lỗi
-│   ├── RequiredFieldsHandler.java  : Trạm 1 - Kiểm tra thông tin bắt buộc và dung lượng <= 5MB
-│   ├── AntivirusScanHandler.java   : Trạm 2 - Quét an toàn mã độc / virus trong file
-│   └── DuplicateCheckHandler.java  : Trạm 3 - Kiểm tra tính toàn vẹn và chống trùng lặp mã hồ sơ
+├── extractor/                      : [Yêu cầu 2] Strategy & Factory Method (Chương 3 & 5)
+│   ├── ContentExtractor.java       : Interface Strategy trích xuất
+│   ├── ExtractorFactory.java       : Factory Method tạo Extractor
+│   ├── TxtExtractor.java           : Trích xuất file .txt thật
+│   ├── PdfExtractor.java           : Giả lập OCR đọc file .pdf
+│   └── ImageOcrExtractor.java      : Giả lập OCR đọc file ảnh .jpg, .png
 │
-├── notification/                   : [Yêu cầu 4] Observer Pattern
-│   ├── DocumentObserver.java       : Interface Observer nhận thông báo
-│   ├── NotificationManager.java    : Subject quản lý danh sách kênh và preference người dùng
-│   ├── EmailNotifier.java          : Observer gửi thông báo qua Email
-│   ├── SmsNotifier.java            : Observer gửi thông báo qua tin nhắn SMS
-│   └── AppPushNotifier.java        : Observer gửi thông báo qua App Mobile Push
+├── validation/                     : [Yêu cầu 3] Template Method Pattern (Chương 4)
+│   ├── AbstractDocumentValidator.java : Base Template với Hollywood Principle & Hook
+│   ├── StandardDocumentValidator.java : Kiểm duyệt tiêu chuẩn
+│   ├── StrictSecurityValidator.java   : Kiểm duyệt an ninh cao (Bật Hook RSA)
+│   └── ValidationResult.java       : Đóng gói kết quả kiểm tra
 │
-├── repository/                     : [Yêu cầu 5] Repository & Factory Pattern
-│   ├── DocumentRepository.java     : Interface chuẩn hóa thao tác lưu trữ
-│   ├── RepositoryFactory.java      : Factory khởi tạo kho lưu trữ (JSON/MySQL/AWS S3)
-│   ├── JsonFileRepository.java     : Lưu trữ hồ sơ dạng file .json cục bộ
-│   ├── MySqlRepository.java        : Mô phỏng lưu trữ vào Cơ sở dữ liệu MySQL
-│   └── S3Repository.java           : Mô phỏng lưu trữ lên Đám mây AWS S3
+├── notification/                   : [Yêu cầu 4] Observer & Singleton Pattern (Chương 9 & 2)
+│   ├── NotificationManager.java    : Singleton Subject phát thông báo
+│   ├── DocumentObserver.java       : Observer Interface
+│   ├── EmailNotifier.java          : Kênh Email
+│   ├── SmsNotifier.java            : Kênh SMS
+│   └── AppPushNotifier.java        : Kênh App Push
 │
-└── service/                        : Tầng Service điều phối nghiệp vụ
-    └── DocumentProcessor.java      : Điều phối quy trình duyệt, trích xuất, lưu trữ và thông báo
+├── storage/                        : [Yêu cầu 5] Adapter Pattern (Chương 8)
+│   ├── DocumentStorageTarget.java  : Target Interface chuẩn hóa lưu trữ
+│   ├── JsonFileStorageAdapter.java : Adapter ghi file JSON thật vào server_storage/
+│   ├── MySqlStorageAdapter.java    : Adapter mô phỏng MySQL Database
+│   ├── AwsS3StorageAdapter.java    : Adapter mô phỏng Cloud AWS S3
+│   └── StorageAdapterFactory.java  : Factory cung cấp Adapter phù hợp
+│
+└── service/                        : Service điều phối nghiệp vụ
+    └── DocumentProcessor.java      : Kết nối Validator, Extractor, Adapter và Notifier
 
 5. HƯỚNG DẪN BIÊN DỊCH VÀ CHẠY
 --------------------------------------------------------------------------------
 Bước 1: Mở Terminal tại thư mục gốc dự án.
 
 Bước 2: Biên dịch:
-        javac -d bin *.java
+        javac -d bin *.java command/*.java extractor/*.java model/*.java notification/*.java storage/*.java service/*.java validation/*.java
 
-Bước 3: Chạy Demo Console:
+Bước 3: Chạy Demo Console (5 kịch bản kiểm thử):
         java -cp bin MainDemo
 
 Bước 4: Chạy giao diện Swing:

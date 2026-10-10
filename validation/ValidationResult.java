@@ -1,14 +1,14 @@
 package validation;
 
-// Ket qua kiem tra sau moi tram
+// Ket qua danh gia kiem duyet ho so
 public class ValidationResult {
     private final boolean valid;
     private final String errorMessage;
-    private final String failedHandlerName;
+    private final String failedStepName;
 
-    private ValidationResult(boolean valid, String failedHandlerName, String errorMessage) {
+    private ValidationResult(boolean valid, String failedStepName, String errorMessage) {
         this.valid = valid;
-        this.failedHandlerName = failedHandlerName;
+        this.failedStepName = failedStepName;
         this.errorMessage = errorMessage;
     }
 
@@ -16,11 +16,12 @@ public class ValidationResult {
         return new ValidationResult(true, null, null);
     }
 
-    public static ValidationResult failure(String handlerName, String message) {
-        return new ValidationResult(false, handlerName, message);
+    public static ValidationResult failure(String stepName, String message) {
+        return new ValidationResult(false, stepName, message);
     }
 
     public boolean isValid() { return valid; }
     public String getErrorMessage() { return errorMessage; }
-    public String getFailedHandlerName() { return failedHandlerName; }
+    public String getFailedStepName() { return failedStepName; }
+    public String getFailedHandlerName() { return failedStepName; } // Alias ho tro tuong thich nguoc
 }
