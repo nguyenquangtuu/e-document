@@ -28,4 +28,16 @@ public enum DocumentStatus {
         }
         return MOI_TAO;
     }
+
+    public boolean isTerminal() {
+        return this == DA_XU_LY || this == TU_CHOI;
+    }
+
+    public boolean isApproved() {
+        return this == DA_XU_LY;
+    }
+
+    public boolean isRejected() {
+        return this == TU_CHOI;
+    }
 }
