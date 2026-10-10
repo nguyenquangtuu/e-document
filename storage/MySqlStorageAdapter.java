@@ -58,4 +58,9 @@ public class MySqlStorageAdapter implements DocumentStorageTarget {
     public boolean exists(String id) throws Exception {
         return id != null && simulatedDbTable.containsKey(id);
     }
+
+    @Override
+    public int count() throws Exception {
+        return simulatedDbTable.size();
+    }
 }

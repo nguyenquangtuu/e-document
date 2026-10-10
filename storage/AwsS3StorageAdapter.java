@@ -67,4 +67,9 @@ public class AwsS3StorageAdapter implements DocumentStorageTarget {
     public boolean exists(String id) throws Exception {
         return id != null && s3BucketStorage.containsKey(id);
     }
+
+    @Override
+    public int count() throws Exception {
+        return s3BucketStorage.size();
+    }
 }

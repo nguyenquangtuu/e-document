@@ -103,6 +103,11 @@ public class JsonFileStorageAdapter implements DocumentStorageTarget {
         return new File(storageDirPath, id + "_data.json").exists();
     }
 
+    @Override
+    public int count() throws Exception {
+        return findAll().size();
+    }
+
     public static String toJson(Document doc) {
         if (doc == null) return "{}";
         return "{\n" +
