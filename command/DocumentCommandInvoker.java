@@ -76,6 +76,14 @@ public class DocumentCommandInvoker {
         return !redoStack.isEmpty();
     }
 
+    public int getUndoStackSize() {
+        return undoStack.size();
+    }
+
+    public int getRedoStackSize() {
+        return redoStack.size();
+    }
+
     public List<String> getAuditLogs() {
         return Collections.unmodifiableList(auditLogs);
     }
