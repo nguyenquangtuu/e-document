@@ -7,8 +7,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Concrete Class 1 trong Template Method Pattern:
+ * Concrete Class 1 trong Template Method Pattern (Chuong 4 - Course Syllabus 504077):
  * Kiem duyet ho so theo tieu chuan nghiep vu co ban (Standard).
+ * Trien khai cac Primitive Steps duoc dinh nghia trong AbstractDocumentValidator.
+ * Tuan thu nguyen ly Hollywood Principle ("Don't call us, we'll call you"):
+ * Lop con khong can quan ly trinh tu, chi tap trung vao logic cua tung buoc rieng biet.
  */
 public class StandardDocumentValidator extends AbstractDocumentValidator {
     private final Set<String> existingIds = Collections.synchronizedSet(new HashSet<>());
