@@ -15,12 +15,19 @@ import java.util.Set;
  */
 public class StandardDocumentValidator extends AbstractDocumentValidator {
     private final Set<String> existingIds = Collections.synchronizedSet(new HashSet<>());
+    private final Set<String> customMalwareKeywords = Collections.synchronizedSet(new HashSet<>());
 
     public StandardDocumentValidator() {}
 
     public StandardDocumentValidator(Set<String> initialIds) {
         if (initialIds != null) {
             this.existingIds.addAll(initialIds);
+        }
+    }
+
+    public void registerMalwareKeyword(String keyword) {
+        if (keyword != null) {
+            customMalwareKeywords.add(keyword.toLowerCase().trim());
         }
     }
 
