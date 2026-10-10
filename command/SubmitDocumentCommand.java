@@ -7,6 +7,9 @@ import service.DocumentProcessor;
 
 /**
  * Concrete Command 1: Lenh nop va xu ly ho so (Submit Document).
+ * Dong vai tro la Concrete Command trong GoF Command Pattern (Chuong 7).
+ * Receiver: DocumentProcessor & DocumentStorageTarget.
+ * Ho tro thuc thi quy trinh tiep nhan va hoan tac (Undo) quay ve trang thai ban dau.
  */
 public class SubmitDocumentCommand implements DocumentCommand {
     private final DocumentProcessor processor;
