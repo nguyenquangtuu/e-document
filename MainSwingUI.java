@@ -14,7 +14,6 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-// Giao dien Swing chinh cua he thong eDocument v2.0
 public class MainSwingUI extends JFrame {
     private JTextArea consoleArea;
     private JTable documentTable;
@@ -54,7 +53,6 @@ public class MainSwingUI extends JFrame {
         splitPane.setDividerLocation(300);
         add(splitPane, BorderLayout.CENTER);
 
-        // Thanh cong cu Toolbar
         JPanel toolBar = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 8));
         JButton btnAdd = new JButton("Them ho so");
         JButton btnApprove = new JButton("Phe duyet (Command)");
@@ -62,7 +60,6 @@ public class MainSwingUI extends JFrame {
         JButton btnUndo = new JButton("Hoan tac (Undo)");
         JButton btnClear = new JButton("Xoa log");
 
-        // Chon Adapter luu tru (Adapter Pattern - Chuong 8)
         JLabel lblStorage = new JLabel("Kho luu tru (Adapter):");
         cbStorageType = new JComboBox<>(new String[]{"Local JSON File", "MySQL Database", "AWS S3 Cloud"});
 
@@ -80,7 +77,6 @@ public class MainSwingUI extends JFrame {
         loadExistingDocuments();
         refreshTable();
 
-        // Bat su kien chuyen doi Adapter Luu tru (Adapter Pattern)
         cbStorageType.addActionListener(e -> {
             String selected = (String) cbStorageType.getSelectedItem();
             String key = "json";
@@ -94,14 +90,12 @@ public class MainSwingUI extends JFrame {
             refreshTable();
         });
 
-        // Su kien Them ho so moi
         btnAdd.addActionListener(e -> {
             AddDocumentDialog dialog = new AddDocumentDialog(this, processor, invoker);
             dialog.setVisible(true);
             refreshTable();
         });
 
-        // Su kien Phe duyet (Command Pattern)
         btnApprove.addActionListener(e -> {
             Document selectedDoc = getSelectedDocument();
             if (selectedDoc == null) {
@@ -116,7 +110,6 @@ public class MainSwingUI extends JFrame {
             }
         });
 
-        // Su kien Tu choi (Command Pattern)
         btnReject.addActionListener(e -> {
             Document selectedDoc = getSelectedDocument();
             if (selectedDoc == null) {
@@ -134,7 +127,6 @@ public class MainSwingUI extends JFrame {
             }
         });
 
-        // Su kien Hoan tac Undo (Command Pattern)
         btnUndo.addActionListener(e -> {
             if (invoker.canUndo()) {
                 invoker.undo();
@@ -146,7 +138,6 @@ public class MainSwingUI extends JFrame {
 
         btnClear.addActionListener(e -> consoleArea.setText(""));
 
-        // Hien thi chi tiet ho so khi click vao hang
         documentTable.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && documentTable.getSelectedRow() != -1) {
                 Document doc = getSelectedDocument();

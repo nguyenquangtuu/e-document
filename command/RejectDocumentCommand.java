@@ -5,9 +5,6 @@ import model.DocumentStatus;
 import notification.NotificationManager;
 import storage.DocumentStorageTarget;
 
-/**
- * Concrete Command 3: Lenh tu choi ho so (Reject Document).
- */
 public class RejectDocumentCommand implements DocumentCommand {
     private final DocumentStorageTarget storage;
     private final Document document;
@@ -43,7 +40,7 @@ public class RejectDocumentCommand implements DocumentCommand {
             storage.save(document);
         }
         NotificationManager.getInstance().notifyStatusChanged(
-            document, current, previousStatus, 
+            document, current, previousStatus,
             "Hoan tac (Undo) lenh tu choi. Quay ve trang thai: " + (previousStatus != null ? previousStatus.getDisplayName() : "")
         );
         System.out.println("[Command::Reject] Da hoan tac lenh tu choi ho so: " + document.getId());
@@ -59,3 +56,4 @@ public class RejectDocumentCommand implements DocumentCommand {
         return document;
     }
 }
+

@@ -2,7 +2,6 @@ package extractor;
 
 import java.io.IOException;
 
-// Gia lap OCR nhan dien hinh anh (.jpg, .jpeg, .png)
 public class ImageOcrExtractor implements ContentExtractor {
 
     @Override
@@ -18,3 +17,4 @@ public class ImageOcrExtractor implements ContentExtractor {
         return "Noi dung trich xuat tu hinh anh qua OCR";
     }
 }
+

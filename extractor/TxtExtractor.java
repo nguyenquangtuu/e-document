@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-// Doc file text thuan .txt
 public class TxtExtractor implements ContentExtractor {
 
     @Override
@@ -18,3 +17,4 @@ public class TxtExtractor implements ContentExtractor {
         return new String(Files.readAllBytes(Paths.get(filePath)));
     }
 }
+

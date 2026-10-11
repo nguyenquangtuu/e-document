@@ -12,10 +12,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Adapter 1 trong Adapter Pattern (Chuong 8 - Course Syllabus 504077):
- * Chuyen doi (Adapt) he thong tap tin JSON cuc bo sang giao tiep tieu chuan DocumentStorageTarget.
- */
 public class JsonFileStorageAdapter implements DocumentStorageTarget {
     private final String storageDirPath;
 
@@ -43,7 +39,6 @@ public class JsonFileStorageAdapter implements DocumentStorageTarget {
         File dir = new File(storageDirPath);
         if (!dir.exists()) dir.mkdirs();
 
-        // Sao chep tap tin dinh kem neu co
         if (doc.getFilePath() != null && !doc.getFilePath().trim().isEmpty()) {
             File sourceFile = new File(doc.getFilePath());
             if (sourceFile.exists()) {
@@ -52,7 +47,6 @@ public class JsonFileStorageAdapter implements DocumentStorageTarget {
             }
         }
 
-        // Ghi thong tin ho so ra file JSON
         String json = toJson(doc);
         File dataFile = new File(storageDirPath, doc.getId() + "_data.json");
         try (FileWriter writer = new FileWriter(dataFile)) {
@@ -181,3 +175,4 @@ public class JsonFileStorageAdapter implements DocumentStorageTarget {
         }
     }
 }
+

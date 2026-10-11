@@ -1,14 +1,5 @@
 package model;
 
-/**
- * Lop thuc the chua thong tin ho so dien tu (Domain Model Entity).
- * Dong vai tro la Receiver/Data Holder xuyen suot cac mau thiet ke:
- * - Duoc dong goi trong Command de thuc thi/hoan tac (Command Pattern).
- * - Duoc kiem tra boi AbstractDocumentValidator (Template Method Pattern).
- * - Duoc trich xuat boi ContentExtractor (Strategy Pattern).
- * - Duoc luu tru qua DocumentStorageTarget (Adapter Pattern).
- * - Duoc thong bao qua NotificationManager (Observer Pattern).
- */
 public class Document {
     private String id;
     private String applicantName;
@@ -48,7 +39,6 @@ public class Document {
         this.status = DocumentStatus.MOI_TAO;
     }
 
-    // Builder Pattern: Lop Builder tinh ho tro khoi tao tung phan va luu nhap
     public static class Builder {
         private final Document document;
 
@@ -103,7 +93,6 @@ public class Document {
         }
     }
 
-    // Copy constructor ho tro luu trang thai truoc khi thuc thi lenh (Command Pattern Undo)
     public Document(Document other) {
         if (other != null) {
             this.id = other.id;
@@ -123,7 +112,6 @@ public class Document {
         }
     }
 
-    // Kiem tra du 11 truong thong tin co ban
     public boolean validate() {
         return isNotEmpty(this.id) &&
                isNotEmpty(this.applicantName) &&
@@ -142,7 +130,6 @@ public class Document {
         return str != null && !str.trim().isEmpty();
     }
 
-    // Getters va Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 

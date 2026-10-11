@@ -6,13 +6,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Concrete Class 1 trong Template Method Pattern (Chuong 4 - Course Syllabus 504077):
- * Kiem duyet ho so theo tieu chuan nghiep vu co ban (Standard).
- * Trien khai cac Primitive Steps duoc dinh nghia trong AbstractDocumentValidator.
- * Tuan thu nguyen ly Hollywood Principle ("Don't call us, we'll call you"):
- * Lop con khong can quan ly trinh tu, chi tap trung vao logic cua tung buoc rieng biet.
- */
 public class StandardDocumentValidator extends AbstractDocumentValidator {
     private final Set<String> existingIds = Collections.synchronizedSet(new HashSet<>());
     private final Set<String> customMalwareKeywords = Collections.synchronizedSet(new HashSet<>());
@@ -48,7 +41,7 @@ public class StandardDocumentValidator extends AbstractDocumentValidator {
         if (doc.getApplicantEmail() == null || !doc.getApplicantEmail().contains("@")) {
             return ValidationResult.failure("RequiredFields", "Email nguoi nop khong hop le.");
         }
-        if (doc.getFileSizeKB() > 5120) { // Vuot qua 5MB
+        if (doc.getFileSizeKB() > 5120) {
             return ValidationResult.failure("RequiredFields", "Dung luong tep vuot qua gioi han 5MB (Hien tai: " + doc.getFileSizeKB() + " KB).");
         }
         return ValidationResult.success();
@@ -71,5 +64,5 @@ public class StandardDocumentValidator extends AbstractDocumentValidator {
         return ValidationResult.success();
     }
 
-    // Standard validator giu nguyen hook mac dinh (khong bat hook bao mat cao)
 }
+

@@ -5,12 +5,6 @@ import model.DocumentStatus;
 import notification.NotificationManager;
 import service.DocumentProcessor;
 
-/**
- * Concrete Command 1: Lenh nop va xu ly ho so (Submit Document).
- * Dong vai tro la Concrete Command trong GoF Command Pattern (Chuong 7).
- * Receiver: DocumentProcessor & DocumentStorageTarget.
- * Ho tro thuc thi quy trinh tiep nhan va hoan tac (Undo) quay ve trang thai ban dau.
- */
 public class SubmitDocumentCommand implements DocumentCommand {
     private final DocumentProcessor processor;
     private final Document document;
@@ -36,12 +30,11 @@ public class SubmitDocumentCommand implements DocumentCommand {
         if (document == null || !executedSuccessfully) return;
         DocumentStatus current = document.getStatus();
         document.setStatus(previousStatus != null ? previousStatus : DocumentStatus.MOI_TAO);
-        
-        // Luu lai trang thai sau hoan tac
+
         processor.getStorageAdapter().save(document);
-        
+
         NotificationManager.getInstance().notifyStatusChanged(
-            document, current, document.getStatus(), 
+            document, current, document.getStatus(),
             "Lenh nop ho so da duoc HOAN TAC (Undo). Trang thai quay ve: " + document.getStatus().getDisplayName()
         );
         System.out.println("[Command::Submit] Da hoan tac (Undo) lenh nop ho so: " + document.getId());
@@ -57,3 +50,4 @@ public class SubmitDocumentCommand implements DocumentCommand {
         return document;
     }
 }
+

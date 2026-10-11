@@ -1,6 +1,5 @@
 package validation;
 
-// Ket qua danh gia kiem duyet ho so
 public class ValidationResult {
     private final boolean valid;
     private final String errorMessage;
@@ -23,5 +22,6 @@ public class ValidationResult {
     public boolean isValid() { return valid; }
     public String getErrorMessage() { return errorMessage; }
     public String getFailedStepName() { return failedStepName; }
-    public String getFailedHandlerName() { return failedStepName; } // Alias ho tro tuong thich nguoc
+    public String getFailedHandlerName() { return failedStepName; }
 }
+

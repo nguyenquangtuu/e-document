@@ -7,30 +7,22 @@ import java.util.Date;
 import java.util.List;
 import java.util.Stack;
 
-/**
- * Invoker trong Command Pattern (Chuong 7 - Course Syllabus 504077):
- * - Quan ly viec goi thuc thi lenh (execute)
- * - Quan ly ngan xep lich su phuc vu Hoan tac / Lam lai (Case Study 7.5: Undo / Redo)
- * - Quan ly nhat ky giao dich kiem toan he thong (Case Study 7.6: Logging)
- */
 public class DocumentCommandInvoker {
     private final Stack<DocumentCommand> undoStack = new Stack<>();
     private final Stack<DocumentCommand> redoStack = new Stack<>();
     private final List<String> auditLogs = Collections.synchronizedList(new ArrayList<>());
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    // Thuc thi lenh moi
     public void executeCommand(DocumentCommand command) throws Exception {
         if (command == null) return;
 
         command.execute();
         undoStack.push(command);
-        redoStack.clear(); // Xoa stack redo khi co hanh dong moi
+        redoStack.clear();
 
         logAction("EXECUTE", command.getDescription());
     }
 
-    // Hoan tac lenh vua thuc thi (Undo)
     public boolean undo() {
         if (undoStack.isEmpty()) {
             System.out.println("[CommandInvoker] Ngan xep Undo rong, khong the hoan tac.");
@@ -49,7 +41,6 @@ public class DocumentCommandInvoker {
         }
     }
 
-    // Lam lai lenh vua hoan tac (Redo)
     public boolean redo() {
         if (redoStack.isEmpty()) {
             System.out.println("[CommandInvoker] Ngan xep Redo rong, khong the lam lai.");
@@ -94,3 +85,4 @@ public class DocumentCommandInvoker {
         System.out.println("[AUDIT LOG] " + logEntry);
     }
 }
+

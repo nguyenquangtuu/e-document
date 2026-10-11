@@ -3,7 +3,6 @@ package notification;
 import model.Document;
 import model.DocumentStatus;
 
-// Gui thong bao qua Email
 public class EmailNotifier implements DocumentObserver {
 
     @Override
@@ -17,3 +16,4 @@ public class EmailNotifier implements DocumentObserver {
         System.out.println("Email gui den " + doc.getApplicantEmail() + ": Ho so " + doc.getId() + " chuyen sang trang thai " + newStatus.getDisplayName());
     }
 }
+

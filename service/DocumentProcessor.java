@@ -11,13 +11,6 @@ import validation.AbstractDocumentValidator;
 import validation.StandardDocumentValidator;
 import validation.ValidationResult;
 
-/**
- * Service dieu phoi quy trinh xu ly ho so:
- * - Kiem duyet bang Template Method Pattern (AbstractDocumentValidator)
- * - Trich xuat noi dung bang Strategy & Factory Method Pattern (ContentExtractor, ExtractorFactory)
- * - Luu tru bang Adapter Pattern (DocumentStorageTarget)
- * - Phat thong bao bang Singleton & Observer Pattern (NotificationManager)
- */
 public class DocumentProcessor {
     private final AbstractDocumentValidator validator;
     private final NotificationManager notificationManager;
@@ -50,7 +43,6 @@ public class DocumentProcessor {
 
         System.out.println("\n[DocumentProcessor] Bat dau xu ly ho so: " + doc.getId());
 
-        // Buoc 1: Kiem tra ho so qua Template Method Pattern
         ValidationResult result = validator.validate(doc);
         if (!result.isValid()) {
             DocumentStatus oldStatus = doc.getStatus();
@@ -64,7 +56,6 @@ public class DocumentProcessor {
         doc.setStatus(DocumentStatus.DA_TIEP_NHAN);
         notificationManager.notifyStatusChanged(doc, s1, DocumentStatus.DA_TIEP_NHAN, "Ho so hop le va da duoc tiep nhan.");
 
-        // Buoc 2: Trich xuat noi dung file qua Strategy & Factory Method
         try {
             ContentExtractor extractor = ExtractorFactory.getExtractor(doc.getFileExtension());
             String content = extractor.extract(doc.getFilePath());
@@ -78,7 +69,6 @@ public class DocumentProcessor {
             return false;
         }
 
-        // Buoc 3: Luu tru ho so thong qua Adapter Pattern
         try {
             storageAdapter.save(doc);
             System.out.println("[DocumentProcessor] Luu tru thanh cong qua adapter: " + storageAdapter.getStorageName());
@@ -90,12 +80,10 @@ public class DocumentProcessor {
             return false;
         }
 
-        // Chuyen trang thai sang DANG_XET_DUYET
         DocumentStatus s2 = doc.getStatus();
         doc.setStatus(DocumentStatus.DANG_XET_DUYET);
         notificationManager.notifyStatusChanged(doc, s2, DocumentStatus.DANG_XET_DUYET, "Ho so dang duoc can bo tham dinh.");
 
-        // Hoan tat xu ly sang DA_XU_LY
         DocumentStatus s3 = doc.getStatus();
         doc.setStatus(DocumentStatus.DA_XU_LY);
         try {

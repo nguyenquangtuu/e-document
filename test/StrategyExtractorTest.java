@@ -10,7 +10,6 @@ public class StrategyExtractorTest {
     public static void main(String[] args) {
         System.out.println("Running StrategyExtractorTest...");
 
-        // 1. Test Factory returns correct Strategy
         ContentExtractor txt = ExtractorFactory.getExtractor("txt");
         assert txt instanceof TxtExtractor : "Must return TxtExtractor for txt extension";
 
@@ -20,7 +19,6 @@ public class StrategyExtractorTest {
         ContentExtractor jpg = ExtractorFactory.getExtractor("jpg");
         assert jpg instanceof ImageOcrExtractor : "Must return ImageOcrExtractor for jpg extension";
 
-        // 2. Test dynamic custom extractor registration
         ExtractorFactory.registerExtractor(new ContentExtractor() {
             @Override
             public String extract(String filePath) { return "CUSTOM_EXTRACTED"; }
@@ -34,3 +32,4 @@ public class StrategyExtractorTest {
         System.out.println("StrategyExtractorTest PASSED.");
     }
 }
+

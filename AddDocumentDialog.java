@@ -9,7 +9,6 @@ import java.awt.*;
 import java.io.File;
 import java.util.UUID;
 
-// Dialog nhap thong tin tiep nhan ho so (Ket noi voi Command Pattern de Submit)
 public class AddDocumentDialog extends JDialog {
     private JTextField txtApplicantName, txtApplicantEmail, txtApplicantPhone;
     private JTextField txtOfficerName, txtOfficerEmail, txtOfficerPhone;
@@ -17,7 +16,7 @@ public class AddDocumentDialog extends JDialog {
     private JTextField txtDigitalSignature;
     private JLabel lblFileName;
     private File selectedFile;
-    
+
     private DocumentProcessor processor;
     private DocumentCommandInvoker invoker;
     private MainSwingUI parent;
@@ -31,7 +30,7 @@ public class AddDocumentDialog extends JDialog {
         this.parent = parent;
         this.processor = processor;
         this.invoker = (invoker != null) ? invoker : new DocumentCommandInvoker();
-        
+
         setSize(440, 520);
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout());
@@ -113,7 +112,6 @@ public class AddDocumentDialog extends JDialog {
             }
         }
 
-        // Su dung Builder Pattern de khoi tao Document tung buoc va linh hoat
         String id = "DOC" + UUID.randomUUID().toString().substring(0, 5).toUpperCase();
         Document doc = new Document.Builder()
                 .withId(id)
@@ -134,7 +132,7 @@ public class AddDocumentDialog extends JDialog {
                 .build();
 
         try {
-            // Su dung Command Pattern de thuc thi lenh nop ho so
+
             SubmitDocumentCommand submitCmd = new SubmitDocumentCommand(processor, doc);
             invoker.executeCommand(submitCmd);
 

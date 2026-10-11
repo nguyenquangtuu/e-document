@@ -15,7 +15,6 @@ public class CommandPatternTest {
         doc.setId("CMD_TEST_01");
         doc.setStatus(DocumentStatus.DA_TIEP_NHAN);
 
-        // Execute Approve Command
         ApproveDocumentCommand approveCmd = new ApproveDocumentCommand(new JsonFileStorageAdapter("server_storage"), doc, "Test approval");
         invoker.executeCommand(approveCmd);
 
@@ -23,7 +22,6 @@ public class CommandPatternTest {
         assert invoker.canUndo() : "Invoker must be able to undo";
         assert invoker.getUndoStackSize() == 1 : "Undo stack size must be 1";
 
-        // Undo Approve Command
         boolean undoResult = invoker.undo();
         assert undoResult : "Undo must succeed";
         assert doc.getStatus() == DocumentStatus.DA_TIEP_NHAN : "Status must revert to DA_TIEP_NHAN";
@@ -32,3 +30,4 @@ public class CommandPatternTest {
         System.out.println("CommandPatternTest PASSED.");
     }
 }
+

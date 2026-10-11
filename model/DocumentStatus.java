@@ -1,6 +1,5 @@
 package model;
 
-// Enum cac trang thai cua ho so
 public enum DocumentStatus {
     MOI_TAO("Moi tao"),
     DA_TIEP_NHAN("Da tiep nhan"),
@@ -41,3 +40,4 @@ public enum DocumentStatus {
         return this == TU_CHOI;
     }
 }
+

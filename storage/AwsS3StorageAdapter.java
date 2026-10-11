@@ -8,14 +8,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Adapter 3 trong Adapter Pattern (Chuong 8 - Course Syllabus 504077):
- * Chuyen doi (Adapt) giao tiep Cloud Object Storage (AWS S3 Bucket)
- * sang giao tiep chuan DocumentStorageTarget cua he thong.
- */
 public class AwsS3StorageAdapter implements DocumentStorageTarget {
     private final String bucketName;
-    // Mo phong AWS S3 Bucket Object Key-Value Storage
+
     private final Map<String, Document> s3BucketStorage = Collections.synchronizedMap(new LinkedHashMap<>());
 
     public AwsS3StorageAdapter() {
@@ -34,7 +29,7 @@ public class AwsS3StorageAdapter implements DocumentStorageTarget {
     @Override
     public void save(Document doc) throws Exception {
         if (doc == null || doc.getId() == null) return;
-        // Mo phong lenh s3Client.putObject(bucketName, key, documentPayload)
+
         s3BucketStorage.put(doc.getId(), new Document(doc));
         System.out.println("[AwsS3StorageAdapter] S3::putObject(bucket='" + bucketName + "', key='" + doc.getId() + "') -> 200 OK.");
     }
@@ -73,3 +68,4 @@ public class AwsS3StorageAdapter implements DocumentStorageTarget {
         return s3BucketStorage.size();
     }
 }
+

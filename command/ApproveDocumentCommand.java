@@ -5,9 +5,6 @@ import model.DocumentStatus;
 import notification.NotificationManager;
 import storage.DocumentStorageTarget;
 
-/**
- * Concrete Command 2: Lenh phe duyet ho so (Approve Document).
- */
 public class ApproveDocumentCommand implements DocumentCommand {
     private final DocumentStorageTarget storage;
     private final Document document;
@@ -43,7 +40,7 @@ public class ApproveDocumentCommand implements DocumentCommand {
             storage.save(document);
         }
         NotificationManager.getInstance().notifyStatusChanged(
-            document, current, previousStatus, 
+            document, current, previousStatus,
             "Hoan tac (Undo) lenh phe duyet. Quay ve trang thai: " + (previousStatus != null ? previousStatus.getDisplayName() : "")
         );
         System.out.println("[Command::Approve] Da hoan tac phe duyet ho so: " + document.getId());
@@ -59,3 +56,4 @@ public class ApproveDocumentCommand implements DocumentCommand {
         return document;
     }
 }
+

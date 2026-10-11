@@ -3,7 +3,6 @@ package notification;
 import model.Document;
 import model.DocumentStatus;
 
-// Gui thong bao qua SMS
 public class SmsNotifier implements DocumentObserver {
 
     @Override
@@ -17,3 +16,4 @@ public class SmsNotifier implements DocumentObserver {
         System.out.println("SMS gui den " + doc.getApplicantPhone() + ": Ho so " + doc.getId() + " chuyen sang trang thai " + newStatus.getDisplayName());
     }
 }
+

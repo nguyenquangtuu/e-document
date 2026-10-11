@@ -3,7 +3,6 @@ package notification;
 import model.Document;
 import model.DocumentStatus;
 
-// Gui thong bao qua App Mobile Push
 public class AppPushNotifier implements DocumentObserver {
 
     @Override
@@ -17,3 +16,4 @@ public class AppPushNotifier implements DocumentObserver {
         System.out.println("App Push gui den nguoi dung " + doc.getApplicantName() + ": Ho so " + doc.getId() + " - " + newStatus.getDisplayName());
     }
 }
+

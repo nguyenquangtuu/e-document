@@ -1,9 +1,5 @@
 package storage;
 
-/**
- * StorageAdapterFactory:
- * Factory khoi tao cac Adapter luu tru tuong ung theo cau hinh he thong.
- */
 public class StorageAdapterFactory {
 
     public static DocumentStorageTarget getStorageAdapter(String type) {
@@ -31,3 +27,4 @@ public class StorageAdapterFactory {
         return new JsonFileStorageAdapter();
     }
 }
+
