@@ -26,7 +26,7 @@ public class AddDocumentDialog extends JDialog {
     }
 
     public AddDocumentDialog(MainSwingUI parent, DocumentProcessor processor, DocumentCommandInvoker invoker) {
-        super(parent, "Tiep nhan ho so moi (Command Pattern)", true);
+        super(parent, "Tiep nhan ho so moi", true);
         this.parent = parent;
         this.processor = processor;
         this.invoker = (invoker != null) ? invoker : new DocumentCommandInvoker();
@@ -80,7 +80,7 @@ public class AddDocumentDialog extends JDialog {
         add(formPanel, BorderLayout.CENTER);
 
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton btnSend = new JButton("Gui ho so (Submit)");
+        JButton btnSend = new JButton("Gui ho so");
         JButton btnCancel = new JButton("Huy");
         btnPanel.add(btnSend);
         btnPanel.add(btnCancel);
@@ -143,7 +143,7 @@ public class AddDocumentDialog extends JDialog {
                 dispose();
             } else {
                 JOptionPane.showMessageDialog(this,
-                        "Ho so bi tu choi boi quy trinh kiem duyet (Template Method). Vui long kiem tra log chi tiet.",
+                        "Ho so khong dat yeu cau kiem duyet. Vui long kiem tra lai thong tin.",
                         "Thong bao", JOptionPane.WARNING_MESSAGE);
                 if (parent != null) {
                     parent.addDocumentToList(doc);

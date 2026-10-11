@@ -14,5 +14,9 @@ Thumbs.db
 server_storage/
 *.zip
 
-# Assignment PDFs (keep repo clean with source code only)
+# Assignment reports & documents (keep repo strictly code-only)
+*.docx
+*.doc
 *.pdf
+BAO_CAO_TIET_LUAN_GIUA_KY*
+convert_to_docx.py

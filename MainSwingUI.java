@@ -30,7 +30,7 @@ public class MainSwingUI extends JFrame {
         this.processor = new DocumentProcessor(this.storageAdapter);
         this.documentList = new ArrayList<>();
 
-        setTitle("He thong Quan ly Ho so Dien tu - eDocument v2.0 (Design Patterns GoF)");
+        setTitle("He thong Quan ly Ho so Dien tu - eDocument v2.0");
         setSize(980, 680);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -47,7 +47,7 @@ public class MainSwingUI extends JFrame {
         consoleArea.setForeground(new Color(120, 255, 120));
         consoleArea.setFont(new Font("Consolas", Font.PLAIN, 12));
         JScrollPane logScrollPane = new JScrollPane(consoleArea);
-        logScrollPane.setBorder(BorderFactory.createTitledBorder("Log he thong & Thong bao Observer"));
+        logScrollPane.setBorder(BorderFactory.createTitledBorder("Nhat ky he thong"));
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tableScrollPane, logScrollPane);
         splitPane.setDividerLocation(300);
@@ -55,12 +55,12 @@ public class MainSwingUI extends JFrame {
 
         JPanel toolBar = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 8));
         JButton btnAdd = new JButton("Them ho so");
-        JButton btnApprove = new JButton("Phe duyet (Command)");
-        JButton btnReject = new JButton("Tu choi (Command)");
-        JButton btnUndo = new JButton("Hoan tac (Undo)");
+        JButton btnApprove = new JButton("Phe duyet");
+        JButton btnReject = new JButton("Tu choi");
+        JButton btnUndo = new JButton("Hoan tac");
         JButton btnClear = new JButton("Xoa log");
 
-        JLabel lblStorage = new JLabel("Kho luu tru (Adapter):");
+        JLabel lblStorage = new JLabel("Kho luu tru:");
         cbStorageType = new JComboBox<>(new String[]{"Local JSON File", "MySQL Database", "AWS S3 Cloud"});
 
         toolBar.add(btnAdd);
@@ -85,7 +85,7 @@ public class MainSwingUI extends JFrame {
 
             this.storageAdapter = StorageAdapterFactory.getStorageAdapter(key);
             this.processor = new DocumentProcessor(this.storageAdapter);
-            System.out.println("\n[Adapter Pattern] Da chuyen sang kho luu tru: " + storageAdapter.getStorageName());
+            System.out.println("\n[Storage] Da chuyen sang kho luu tru: " + storageAdapter.getStorageName());
             loadExistingDocuments();
             refreshTable();
         });
@@ -132,7 +132,7 @@ public class MainSwingUI extends JFrame {
                 invoker.undo();
                 refreshTable();
             } else {
-                JOptionPane.showMessageDialog(this, "Khong co thao tac nao de hoan tac (Undo stack rong)!");
+                JOptionPane.showMessageDialog(this, "Khong co thao tac nao de hoan tac!");
             }
         });
 
