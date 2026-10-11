@@ -48,6 +48,61 @@ public class Document {
         this.status = DocumentStatus.MOI_TAO;
     }
 
+    // Builder Pattern: Lop Builder tinh ho tro khoi tao tung phan va luu nhap
+    public static class Builder {
+        private final Document document;
+
+        public Builder() {
+            this.document = new Document();
+        }
+
+        public Builder withId(String id) {
+            document.id = id;
+            return this;
+        }
+
+        public Builder withApplicantInfo(String name, String email, String phone) {
+            document.applicantName = name;
+            document.applicantEmail = email;
+            document.applicantPhone = phone;
+            return this;
+        }
+
+        public Builder withOfficerInfo(String name, String email, String phone) {
+            document.officerName = name;
+            document.officerEmail = email;
+            document.officerPhone = phone;
+            return this;
+        }
+
+        public Builder withDocumentType(String documentType) {
+            document.documentType = documentType;
+            return this;
+        }
+
+        public Builder withFileInfo(String filePath, String fileExtension, long fileSizeKB) {
+            document.filePath = filePath;
+            document.fileExtension = fileExtension;
+            document.fileSizeKB = fileSizeKB;
+            return this;
+        }
+
+        public Builder withSignatureAndContent(String signature, String content) {
+            document.digitalSignature = signature;
+            document.extractedContent = content;
+            return this;
+        }
+
+        public Builder withStatus(DocumentStatus status) {
+            document.status = status;
+            return this;
+        }
+
+        public Document build() {
+            return this.document;
+        }
+    }
+
     // Copy constructor ho tro luu trang thai truoc khi thuc thi lenh (Command Pattern Undo)
     public Document(Document other) {
         if (other != null) {

@@ -38,8 +38,8 @@ Thư mục gốc:
 ├── MainSwingUI.java                : File thực thi chạy giao diện đồ họa Java Swing
 ├── AddDocumentDialog.java          : Dialog tiếp nhận hồ sơ qua SubmitDocumentCommand
 │
-├── model/                          : Domain Model
-│   ├── Document.java               : Lớp thực thể hồ sơ điện tử
+├── model/                          : Domain Model & Builder Pattern [Yêu cầu 1]
+│   ├── Document.java               : Lớp thực thể hồ sơ điện tử (chứa Document.Builder)
 │   └── DocumentStatus.java         : Enum trạng thái vòng đời
 │
 ├── command/                        : [Yêu cầu 1] Command Pattern (Chương 7)

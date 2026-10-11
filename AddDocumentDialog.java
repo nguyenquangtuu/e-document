@@ -113,22 +113,25 @@ public class AddDocumentDialog extends JDialog {
             }
         }
 
-        // Khoi tao doi tuong Document truc tiep (Loai bo Builder Pattern)
+        // Su dung Builder Pattern de khoi tao Document tung buoc va linh hoat
         String id = "DOC" + UUID.randomUUID().toString().substring(0, 5).toUpperCase();
-        Document doc = new Document(
-                id,
-                txtApplicantName.getText().trim(),
-                txtApplicantEmail.getText().trim(),
-                txtApplicantPhone.getText().trim(),
-                txtOfficerName.getText().trim(),
-                txtOfficerEmail.getText().trim(),
-                txtOfficerPhone.getText().trim(),
-                cbDocumentType.getSelectedItem().toString(),
-                filePath,
-                ext,
-                size,
-                txtDigitalSignature.getText().trim()
-        );
+        Document doc = new Document.Builder()
+                .withId(id)
+                .withApplicantInfo(
+                        txtApplicantName.getText().trim(),
+                        txtApplicantEmail.getText().trim(),
+                        txtApplicantPhone.getText().trim()
+                )
+                .withOfficerInfo(
+                        txtOfficerName.getText().trim(),
+                        txtOfficerEmail.getText().trim(),
+                        txtOfficerPhone.getText().trim()
+                )
+                .withDocumentType(cbDocumentType.getSelectedItem().toString())
+                .withFileInfo(filePath, ext, size)
+                .withSignatureAndContent(txtDigitalSignature.getText().trim(), "")
+                .withStatus(DocumentStatus.MOI_TAO)
+                .build();
 
         try {
             // Su dung Command Pattern de thuc thi lenh nop ho so
