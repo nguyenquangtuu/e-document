@@ -1,4 +1,4 @@
-# Hệ Thống Tiếp Nhận và Xử Lý Hồ Sơ Điện Tử (eDocument) v2.0
+[# Hệ Thống Tiếp Nhận và Xử Lý Hồ Sơ Điện Tử (eDocument) v2.0
 
 > **Báo cáo Tiểu luận Giữa kỳ môn:** Mẫu Thiết Kế (Design Patterns - Mã MH: 504077)  
 > **Trường Đại học Tôn Đức Thắng (TDTU)** - Khoa Công nghệ Thông tin  
@@ -27,11 +27,11 @@
 
 | Yêu Cầu | Bài Toán Nghiệp Vụ | Design Pattern (Syllabus) | Lớp Trọng Tâm |
 | :---: | :--- | :---: | :--- |
-| **YC 1** | Thực thi lệnh nộp/phê duyệt hồ sơ, hỗ trợ **Hoàn tác (Undo/Redo)** và **Audit Logging** | **Command Pattern**<br>*(Chương 7 - Syllabus)* | [`command/DocumentCommand.java`](command/DocumentCommand.java)<br>[`command/SubmitDocumentCommand.java`](command/SubmitDocumentCommand.java)<br>[`command/ApproveDocumentCommand.java`](command/ApproveDocumentCommand.java)<br>[`command/DocumentCommandInvoker.java`](command/DocumentCommandInvoker.java) |
-| **YC 2** | Đọc đa định dạng tài liệu (Đọc `.txt` thật, mô phỏng OCR `.pdf` & ảnh `.jpg`) | **Strategy Pattern & Factory Method**<br>*(Chương 3 & 5 - Syllabus)* | [`extractor/ContentExtractor.java`](extractor/ContentExtractor.java)<br>[`extractor/ExtractorFactory.java`](extractor/ExtractorFactory.java) |
-| **YC 3** | Quy trình kiểm duyệt hồ sơ nhiều bước, ngắt luồng và kích hoạt **Hook Method** | **Template Method Pattern**<br>*(Chương 4 - Syllabus)* | [`validation/AbstractDocumentValidator.java`](validation/AbstractDocumentValidator.java)<br>[`validation/StandardDocumentValidator.java`](validation/StandardDocumentValidator.java)<br>[`validation/StrictSecurityValidator.java`](validation/StrictSecurityValidator.java) |
-| **YC 4** | Đăng ký nhận thông báo theo nhu cầu (`Email`, `SMS`, `App Push`) qua trung tâm duy nhất | **Observer & Singleton Pattern**<br>*(Chương 9 & 2 - Syllabus)* | [`notification/NotificationManager.java`](notification/NotificationManager.java)<br>[`notification/DocumentObserver.java`](notification/DocumentObserver.java) |
-| **YC 5** | Tương thích đa nền tảng lưu trữ (Lưu `.json` thật, mô phỏng `MySQL` & `AWS S3`) | **Adapter Pattern**<br>*(Chương 8 - Syllabus)* | [`storage/DocumentStorageTarget.java`](storage/DocumentStorageTarget.java)<br>[`storage/JsonFileStorageAdapter.java`](storage/JsonFileStorageAdapter.java)<br>[`storage/MySqlStorageAdapter.java`](storage/MySqlStorageAdapter.java)<br>[`storage/AwsS3StorageAdapter.java`](storage/AwsS3StorageAdapter.java) |
+| **YC 1** | Thực thi lệnh nộp/phê duyệt hồ sơ, hỗ trợ **Hoàn tác (Undo/Redo)** và **Audit Logging** | **Command Pattern** | [`command/DocumentCommand.java`](command/DocumentCommand.java)<br>[`command/SubmitDocumentCommand.java`](command/SubmitDocumentCommand.java)<br>[`command/ApproveDocumentCommand.java`](command/ApproveDocumentCommand.java)<br>[`command/DocumentCommandInvoker.java`](command/DocumentCommandInvoker.java) |
+| **YC 2** | Đọc đa định dạng tài liệu (Đọc `.txt` thật, mô phỏng OCR `.pdf` & ảnh `.jpg`) | **Strategy Pattern & Factory Method** | [`extractor/ContentExtractor.java`](extractor/ContentExtractor.java)<br>[`extractor/ExtractorFactory.java`](extractor/ExtractorFactory.java) |
+| **YC 3** | Quy trình kiểm duyệt hồ sơ nhiều bước, ngắt luồng và kích hoạt **Hook Method** | **Template Method Pattern** | [`validation/AbstractDocumentValidator.java`](validation/AbstractDocumentValidator.java)<br>[`validation/StandardDocumentValidator.java`](validation/StandardDocumentValidator.java)<br>[`validation/StrictSecurityValidator.java`](validation/StrictSecurityValidator.java) |
+| **YC 4** | Đăng ký nhận thông báo theo nhu cầu (`Email`, `SMS`, `App Push`) qua trung tâm duy nhất | **Observer & Singleton Pattern** | [`notification/NotificationManager.java`](notification/NotificationManager.java)<br>[`notification/DocumentObserver.java`](notification/DocumentObserver.java) |
+| **YC 5** | Tương thích đa nền tảng lưu trữ (Lưu `.json` thật, mô phỏng `MySQL` & `AWS S3`) | **Adapter Pattern** | [`storage/DocumentStorageTarget.java`](storage/DocumentStorageTarget.java)<br>[`storage/JsonFileStorageAdapter.java`](storage/JsonFileStorageAdapter.java)<br>[`storage/MySqlStorageAdapter.java`](storage/MySqlStorageAdapter.java)<br>[`storage/AwsS3StorageAdapter.java`](storage/AwsS3StorageAdapter.java) |
 
 ---
 
@@ -111,3 +111,4 @@ e-document/
    ```bash
    java -cp bin MainSwingUI
    ```
+](https://github.com/nguyenquangtuu/e-document)
